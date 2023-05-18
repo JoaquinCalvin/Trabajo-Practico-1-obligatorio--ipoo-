@@ -4,13 +4,30 @@ class Viaje{
     private $destino;
     private $cantMaxPasajeros;
     private $pasajeros=[];
+    private $responsable;
 
-    public function __construct($codVia,$dest,$cantM,$arregloPasajeros)
-    {
+    private $costoViaje;
+    private $costoAbonado;
+
+
+    public function __construct($codVia,$dest,$cantM,$arregloPasajeros,$resp,$costo,$costoAbon){
         $this->codigoViaje = $codVia;
         $this->destino = $dest;
         $this->cantMaxPasajeros = $cantM;
         $this->pasajeros = $arregloPasajeros;
+        $this->responsable=$resp;
+        $this->costoViaje=$costo;
+        $this->costoAbonado=$costoAbon;
+
+    }
+    public function getCostoAbonado(){
+        return $this->costoAbonado;    
+    }
+    public function setCostoAbonado($cost){
+        $this->costoAbonado=$cost;    
+    }
+    public function getCostoViaje(){
+        return $this->costoViaje;    
     }
     public function getCodigoViaje(){
         return $this->codigoViaje;    
@@ -36,15 +53,34 @@ class Viaje{
     public function setPasajeros($arregloPasajeros){
         $this->pasajeros = $arregloPasajeros;
     }
-    public function __toString()
-    {
-        $cant_pasajeros=count($this->pasajeros);
-        $psj="";
-        for($i=0;$i<$cant_pasajeros;$i++){
-            $psj = $psj."Pasajero ". $i+1 .", DNI: " .$this->pasajeros[$i]['documento'].", Nombre: ".$this->pasajeros[$i]["nombre"].", Apellido: ".$this->pasajeros[$i]["apellido"];
+    public function setCostoViaje($costo){
+        $this->costoViaje=$costo;    
+    }
+    public function setResponsable($valor){
+        $this->responsable = $valor;
+    }
+    public function getResponsable($valor){
+        $this->responsable = $valor;
+    }
+    public function __toString(){
+        $mensaje="  Codigo Viaje: ".$this->codigoViaje."\n".
+        "  Destino Viaje: ".$this->destino."\n".
+        "  Cantidad de pasajeros: ".$this->cantMaxPasajeros."\n".
+        "  Costo Viaje: ".$this->costoViaje."\n".
+        "  Pasajeros: \n";
+        for($h=0;$h<($this->cantMaxPasajeros);$h++){
+            $mensaje=$mensaje."\nPasajero ".($h+1)."\n".($this->pasajeros)[$h];
         }
-        return "(Codigo de viaje: ".$this->codigoViaje.",\n destino: ".$this->destino.",\n cant pasajeros: ".$this->cantMaxPasajeros.", \n Pasajeros: ".$psj.")";
+        $mensaje=$mensaje.$this->responsable."\n";
+        return $mensaje;
     }
-        
+    public function venderPasaje($pasa){
+        $this->getPasajeros()[]=$pasa;
+        $precioPasajero=$this->getCostoViaje()+$this->getCostoViaje()*$pasa->darPorcentaje();
+        $totalAbonados=$this->getCostoAbonado()+$precioPasajero;
+        $this->setCostoAbonado($totalAbonados);
+        return $precioPasajero;
     }
+    
+}
 ?>
